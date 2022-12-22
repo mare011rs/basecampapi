@@ -45,11 +45,11 @@ print(url)
 
 Open the link that you printed, it will take you to the verification page. Click on "Yes, I'll allow access":
 
-![Verification page](https://user-images.githubusercontent.com/105298890/208861486-3faa5a4d-93aa-4523-90d1-632d67334975.png  "Verification page")](https://user-images.githubusercontent.com/105298890/208861486-3faa5a4d-93aa-4523-90d1-632d67334975.png  "Verification page")
+![Verification page](https://user-images.githubusercontent.com/24939829/209202366-bae05d01-5f8d-4ca6-a0f8-5e1eb9088acd.png  "Verification page")](https://user-images.githubusercontent.com/24939829/209202366-bae05d01-5f8d-4ca6-a0f8-5e1eb9088acd.png  "Verification page")
 
 It will redirect you to the link you provided as Redirect URI, but it will have the verification code in the url address. Save that verification code:
 
-![Verification code](https://user-images.githubusercontent.com/105298890/208861435-012c3328-3c41-4489-b57d-436106886fcf.png  "Verification code")](https://user-images.githubusercontent.com/105298890/208861435-012c3328-3c41-4489-b57d-436106886fcf.png  "Verification code")
+![Verification code](https://user-images.githubusercontent.com/24939829/209202400-d2aa342b-70e1-4fd1-9787-2f3dc1280a57.png  "Verification code")](https://user-images.githubusercontent.com/24939829/209202400-d2aa342b-70e1-4fd1-9787-2f3dc1280a57.png  "Verification code")
 
 Use the verification code together with other credentials to send a POST request to the following link (you will need to use the "requests" library for this):
 
