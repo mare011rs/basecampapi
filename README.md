@@ -1,42 +1,36 @@
 
-# Basecamp API integration
 
-  
+# Basecamp API
 
-This module allows you to interact with Basecamp through python.
-
-  
+This package allows you to interact with [Basecamp API](https://github.com/basecamp/bc3-api) through Python.
 
 ## Table of contents
 
-1. [Requirements](https://github.com/markostefanovic1/basecamp_api#1-requirements "Requirements")
-2. [Installation](https://github.com/markostefanovic1/basecamp_api#2-installation "Installation")
-3. [How to use](https://github.com/markostefanovic1/basecamp_api#3--how-to-use "How to use")
-	- Initial authentication - getting your refresh token
+1. [Installation](https://github.com/markostefanovic1/basecamp_api#2-installation "Installation")
+2. [How to use](https://github.com/markostefanovic1/basecamp_api#3--how-to-use "How to use")
+	- Initial authentication: Getting your refresh token
 	- Generating and using Basecamp sessions
-	- 
+	- Examples
 
 
+## 1. Installation
+The package can be installed from your terminal by typing:
 
-## 1. Requirements
-- Python 3.7 or higher
-- Compatible "requests" library
+    pip install basecampapi
+or
 
-## 2. Installation
+    pip3 install basecampapi
 
--
 
-  
+## 2.  How to use
 
-## 3.  How to use
-
-### Initial authentication - Acquiring your refresh token
+### Initial authentication: Getting your refresh token
 
 To be able to interact with Basecamp's API, you need to provide an access token upon each API request. Basecamp's access tokens are set to expire 2 weeks after being generated, which is why you actually need to acquire a refresh token.
 
 Refresh tokens allow us to automate the process of generating an access token. Generating it requires some manual work, but you only have to do it once and after that you can use it to gain access to Basecamp each time you run your script.
 
-To gain access you need a developer app on Basecamp. App can be created on https://launchpad.37signals.com/integrations, after which you need to use the generated Client ID, Client Secret and the Redirect URI which you provided for initial authentication.
+To gain access you need a developer app on Basecamp. App can be created on https://launchpad.37signals.com/integrations, after which you need to use the generated Client ID, Client Secret and the Redirect URI which you provided for initial authentication. You can read more about the authentication process on [Basecamp API Authentication](https://github.com/basecamp/api/blob/master/sections/authentication.md) page.
 
 To begin the authentication process, first you need to create a link for acquiring a short-term verification code and go to that link. Use your Client ID and Redirect URI inside of the link:
 
@@ -51,11 +45,11 @@ print(url)
 
 Open the link that you printed, it will take you to the verification page. Click on "Yes, I'll allow access":
 
-[![Verification page](https://user-images.githubusercontent.com/105298890/208861486-3faa5a4d-93aa-4523-90d1-632d67334975.png  "Verification page")](https://user-images.githubusercontent.com/105298890/208861486-3faa5a4d-93aa-4523-90d1-632d67334975.png  "Verification page")
+![Verification page](https://user-images.githubusercontent.com/105298890/208861486-3faa5a4d-93aa-4523-90d1-632d67334975.png  "Verification page")](https://user-images.githubusercontent.com/105298890/208861486-3faa5a4d-93aa-4523-90d1-632d67334975.png  "Verification page")
 
 It will redirect you to the link you provided as Redirect URI, but it will have the verification code in the url address. Save that verification code:
 
-[![Verification code](https://user-images.githubusercontent.com/105298890/208861435-012c3328-3c41-4489-b57d-436106886fcf.png  "Verification code")](https://user-images.githubusercontent.com/105298890/208861435-012c3328-3c41-4489-b57d-436106886fcf.png  "Verification code")
+![Verification code](https://user-images.githubusercontent.com/105298890/208861435-012c3328-3c41-4489-b57d-436106886fcf.png  "Verification code")](https://user-images.githubusercontent.com/105298890/208861435-012c3328-3c41-4489-b57d-436106886fcf.png  "Verification code")
 
 Use the verification code together with other credentials to send a POST request to the following link (you will need to use the "requests" library for this):
 
