@@ -1,3 +1,21 @@
+class Authorization:
+    def __init__(self, credentials):
+        self.credentials = credentials
+        self.client_id = credentials["client_id"] 
+        self.client_secret = credentials["client_secret"]
+        self.redirect_uri = credentials["redirect_uri"]
+        self.authorize_app_url = f"https://launchpad.37signals.com/authorization/new?type=web_server\&client_id={self.client_id}\&redirect_uri={self.redirect_uri}"
+        open_string = "open \"\" {}".format(self.authorize_app_url)
+        os.system(open_string)
+        print("If authorization dialigue wasn't opened automatically, visit: " + self.authorize_app_url)
+    
+    def verify(self, code):
+        self.verification_code = code
+        verification_url = f"https://launchpad.37signals.com/authorization/token?type=web_server&client_id={self.client_id}&redirect_uri={self.redirect_uri}&client_secret={self.client_secret}&code={self.verification_code}"
+        response = requests.post(verification_url)
+        refresh_token = response.json()["refresh_token"]
+        print(refresh_token)
+
 class Basecamp:
     
     def __init__(self, account_id, credentials):
