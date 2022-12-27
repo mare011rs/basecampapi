@@ -3,8 +3,8 @@ class Campfire:
     def __init__(self, project_id, campfire_id, session):
         self.__project_id = project_id
         self.__campfire_id = campfire_id
-        self.__access_token = session.access_token
-        self.__base_url = session.base_url
+        self.__access_token = session._Basecamp__access_token
+        self.__base_url = session._Basecamp__base_url
         self.__headers = {
             'Authorization': 'Bearer '+ self.__access_token,
             "Content-Type": "application/json"
