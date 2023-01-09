@@ -30,8 +30,12 @@ class Authorization:
         self.verification_code = code
         verification_url = f"https://launchpad.37signals.com/authorization/token?type=web_server&client_id={self.client_id}&redirect_uri={self.redirect_uri}&client_secret={self.client_secret}&code={self.verification_code}"
         response = requests.post(verification_url)
+        if not response.ok:
+            raise Exception(f"Status code: {response.status_code}. {response.reason}. Error text: {response.text}.")
+        else:
+            print(response.json()["refresh_token"])
+            
         self.refresh_token = response.json()["refresh_token"]
-        print(self.refresh_token)
 
 class Basecamp:
     def __init__(self, account_id: int, credentials: dict):
@@ -50,7 +54,11 @@ class Basecamp:
         self.refresh_token = credentials["refresh_token"]
         self.basecamp_account_id = account_id
         self.__access_url = f"https://launchpad.37signals.com/authorization/token?type=refresh&refresh_token={self.refresh_token}&client_id={self.client_id}&redirect_uri={self.redirect_uri}&client_secret={self.client_secret}"
-        self.__access_token = requests.post(self.__access_url).json()['access_token']
+        response = requests.post(self.__access_url)
+        if not response.ok:
+            raise Exception(f"Status code: {response.status_code}. {response.reason}. Error text: {response.text}.")
+        else:
+            self.__access_token = response.json()['access_token']
         self.__base_url = f"https://3.basecampapi.com/{self.basecamp_account_id}"
         self.files = []
         
@@ -70,8 +78,12 @@ class Basecamp:
             "Content-Length": str(file_size)
             }
 
-        with open(path, "rb") as content:
-            sgid = requests.post(attachments_url, headers=headers, data=content).json()['attachable_sgid']
+        with open(path, "rb") as file_bytes:
+            response = requests.post(attachments_url, headers=headers, data=file_bytes)
+        if not response.ok:
+            raise Exception(f"Status code: {response.status_code}. {response.reason}. Error text: {response.text}.")
+        else:
+            sgid = response.json()['attachable_sgid']
         file = {
             "filename": os.path.basename(path),
             "file_size": str(file_size),
