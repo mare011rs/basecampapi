@@ -7,7 +7,7 @@ This package allows simple interaction with [Basecamp API](https://github.com/ba
 
 ## Table of contents
 
-1. [Installation](https://github.com/markostefanovic1/basecamp_api#1-installation "Installation")
+1. [Installation](https://github.com/mare011rs/basecampapi#1-installation)
 2. Initial authentication: Getting your refresh token
 3. Generating and using Basecamp sessions
 4. Uploading files
