@@ -1,3 +1,6 @@
+import requests
+import os
+
 class MessageBoard:
     
     def __init__(self, project_id: int, message_board_id: int, session: object):

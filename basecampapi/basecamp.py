@@ -1,3 +1,6 @@
+import requests
+import os
+
 class Authorization:
     def __init__(self, credentials: dict) -> str:
         '''

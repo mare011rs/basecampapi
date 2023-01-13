@@ -1,3 +1,5 @@
+import requests
+
 class Campfire:
         
     def __init__(self, project_id: int, campfire_id: int, session: object):
