@@ -136,5 +136,13 @@ message_board = MessageBoard(project_id=123456, message_board_id=123456, session
 message_board.create_message(subject="Test message", content=content)
 ```
 
+## 5. Additional information
 
+Currently available endpoints:
+- Campfire - allows reading campfire messages and writing to campfires
+- MessageBoard - allows reading, creating and updating messages, as well as reading, creating and updating comments on messages
+
+Future upgrades:
+- Vaults (Docs & Files)
+- To-dos
 
