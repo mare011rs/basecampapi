@@ -147,3 +147,5 @@ Future upgrades:
 - Vaults (Docs & Files)
 - To-dos
 
+Request new features in [issues](https://github.com/mare011rs/basecampapi).
+
