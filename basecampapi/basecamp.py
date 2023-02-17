@@ -1,5 +1,6 @@
 import requests
 import os
+from mimetypes import MimeTypes
 
 class Authorization:
     def __init__(self, credentials: dict) -> str:
@@ -63,14 +64,15 @@ class Basecamp:
         else:
             self.__access_token = response.json()['access_token']
         self.__base_url = f"https://3.basecampapi.com/{self.basecamp_account_id}"
-        self.files = []
+        self.files = {}
         
-    def upload_file(self, path: str):
+    def upload_file(self, path: str, filename):
         '''
         Uploads a file to Basecamp's servers and saves the file sgid in Basecamp().files.
 
         Parameters:
             path (str): Path to file you wish to upload.
+            filename
         '''
         attachments_url = f"{self.__base_url}/attachments.json?name={path}"
         file_size = os.path.getsize(path)
@@ -87,10 +89,9 @@ class Basecamp:
             raise Exception(f"Status code: {response.status_code}. {response.reason}. Error text: {response.text}.")
         else:
             sgid = response.json()['attachable_sgid']
-        file = {
-            "filename": os.path.basename(path),
+        self.files[filename] = {
+            "filename": filename,
             "file_size": str(file_size),
             "content-type": mime,
             "sgid": sgid
         }
-        self.files.append(file)
