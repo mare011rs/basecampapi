@@ -110,9 +110,9 @@ After this the file will be on Basecamp's server and it will have an automatical
 ```python
 print(basecamp_session.files)
 ```
-This returns a list of dictionaries that contain information about the files you uploaded:
+This returns a dictionary of dictionaries which contain information about the files you uploaded:
 ```python
-[{'filename': 'image.png',
+[{'filename': 'my_image',
   'file_size': '155291',
   'content-type': 'image/png',
   'sgid': 'your-file-sgid'}]
@@ -126,9 +126,9 @@ To attach a file inside a Basecamp post, comment or any other object where rich 
 Creating a new Message Board post on Basecamp with our uploaded image will look like this:
 ```python
 # Constructing the content string
-content = "Hello world! <br> / 
-<bc-attachment sgid='#######'></bc-attachment> <br> /
-This is an image sent from python."
+content = "Hello world! <br> \ 
+	<bc-attachment sgid='#######' caption='My image'></bc-attachment> <br> \	
+	This is an image sent from python."
 
 # Initiating the message board object (using the previously created session object)
 message_board = MessageBoard(project_id=123456, message_board_id=123456, session=basecamp_session)
