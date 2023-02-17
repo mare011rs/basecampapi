@@ -148,4 +148,3 @@ Future upgrades:
 - To-dos
 
 Request new features in [issues](https://github.com/mare011rs/basecampapi/issues).
-Request new features in [issues](https://github.com/mare011rs/basecampapi/issues).
