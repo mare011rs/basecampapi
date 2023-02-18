@@ -1,24 +1,25 @@
 import requests
-import os
 
-class MessageBoard:
+from ..basecamp import Basecamp
+
+class MessageBoard(Basecamp):
     
-    def __init__(self, project_id: int, message_board_id: int, session: object):
+    def __init__(self, project_id: int, message_board_id: int):
         '''
         Interacts with Message Boards, Messages and Message comments.
 
         Parameters:
             project_id (int): The ID the Basecamp project containing the Message Board.
             message_board_id (int): ID of the Message Board you wish to target.
-            session (object): Previously initialized Basecamp() object.
         '''
+        
+        self.__base_url = Basecamp._Basecamp__base_url
+        self.__credentials = Basecamp._Basecamp__credentials
         self.project_id = project_id
         self.message_board_id = message_board_id
-        self.files = session.files
-        self.__access_token = session._Basecamp__access_token
-        self.__base_url = session._Basecamp__base_url
+
         self.__headers = {
-            'Authorization': 'Bearer '+ self.__access_token,
+            'Authorization': 'Bearer '+ self.__credentials['access_token'],
             "Content-Type": "application/json"
         }
         
