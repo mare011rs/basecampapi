@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "basecampapi"
-version = "0.2.4"
+version = "1.0.0"
 description = ""
 authors = ["mare011rs <mare011rs@gmail.com>"]
 readme = "README.md"
