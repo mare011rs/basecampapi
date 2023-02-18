@@ -6,8 +6,8 @@ This package allows simple interaction with [Basecamp API](https://github.com/ba
 
 1. [Installation](https://github.com/mare011rs/basecampapi#1-installation)
 2. [Initial authentication: Getting your refresh token](https://github.com/mare011rs/basecampapi#2-initial-authentication-getting-your-refresh-token)
-3. [Generating and using Basecamp sessions](https://github.com/mare011rs/basecampapi#3-generating-and-using-basecamp-sessions)
-4. [Uploading files](https://github.com/mare011rs/basecampapi#4-uploading-files)
+3. [Authentication with Refresh token](https://github.com/mare011rs/basecampapi#3-authentication-with-refresh-token)
+4. [Attachments](https://github.com/mare011rs/basecampapi#4-attachments)
 5. [Additional information](https://github.com/mare011rs/basecampapi#5-additional-information)
 
 ## 1. Installation
