@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "basecampapi"
-version = "1.0.0"
+version = "1.1.0"
 description = ""
 authors = ["mare011rs <mare011rs@gmail.com>"]
 readme = "README.md"
@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.7"
 requests = "*"
+filetype = "^1.2.0"
 
 
 [build-system]
