@@ -47,7 +47,12 @@ class Campfire(Basecamp):
             content (str): Message to be sent to campfire. Unable to send rich text, files or images from API to campfire.
         '''
         write_url = f"{self.__base_url}/buckets/{self.project_id}/chats/{self.campfire_id}/lines.json"
-        response = requests.post(write_url, headers=self.__headers, data=str('{"content": "'+content+'"}'))
+
+        payload = {
+            "content": content
+        }
+
+        response = requests.post(write_url, headers=self.__headers, json=payload)
         if not response.ok:
             raise Exception(f"Status code: {response.status_code}. {response.reason}. Error text: {response.text}.")
         else:
