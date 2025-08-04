@@ -7,8 +7,13 @@ This package allows simple interaction with [Basecamp API](https://github.com/ba
 1. [Installation](https://github.com/mare011rs/basecampapi#1-installation)
 2. [Initial authentication: Getting your refresh token](https://github.com/mare011rs/basecampapi#2-initial-authentication-getting-your-refresh-token)
 3. [Authentication with Refresh token](https://github.com/mare011rs/basecampapi#3-authentication-with-refresh-token)
-4. [Attachments](https://github.com/mare011rs/basecampapi#4-attachments)
-5. [Additional information](https://github.com/mare011rs/basecampapi#5-additional-information)
+4. [Message Boards](https://github.com/mare011rs/basecampapi#4-message-boards)
+5. [Campfires](https://github.com/mare011rs/basecampapi#5-campfires)
+6. [Attachments](https://github.com/mare011rs/basecampapi#6-attachments)
+7. [To-dos](https://github.com/mare011rs/basecampapi#7-to-dos)
+8. [Comments](https://github.com/mare011rs/basecampapi#8-comments)
+9. [Chatbots](https://github.com/mare011rs/basecampapi#9-chatbots)
+10. [Custom Request Method](https://github.com/mare011rs/basecampapi#10-custom-request-method)
 
 ## 1. Installation
 The package can be installed from your terminal by typing:
@@ -68,7 +73,7 @@ This will generate your Refresh token and use that token right away to generate 
 
 ## 3. Authentication with Refresh token
 
-To interact with objects on Basecamp you have to initialize the `Basecamo` object. This object will generate your access token and allow you to interact with other Basecamp objects. 
+To interact with objects on Basecamp you have to initialize the `Basecamp` object. This object will generate your access token and allow you to interact with other Basecamp objects. 
 
 ```python
 from basecampapi import Basecamp
@@ -83,80 +88,186 @@ your_credentials = {
 
 bc = Basecamp(credentials=your_credentials)
 ```
-This generates the Access token which is then used in object that interact with Basecamp.
+This generates the Access token which is then used in objects that interact with Basecamp.
+
+## 4. Message Boards
+
+Message Boards allow you to create, read, and update messages. They are useful for team announcements, discussions, and documentation. For working with comments on messages, use the dedicated Comments module (see section 8).
 
 ```python
-from basecampapi import Campfire
+# Create a MessageBoard resource
+message_board = bc.message_board(project_id=123456, message_board_id=123456)
 
-# Initiates a Campfire object using previously created session
-your_campfire = Campfire(campfire_id='your-campfire-id', project_id='your-project-id')
+# Get all messages
+messages = message_board.get_all_messages()
 
-# Sends a campfire message with desired content
-your_campfire.write(content="Hello from Python!") 
+# Create a new message
+new_message = message_board.create_message(
+    data={
+        "subject": "Team update",
+        "content": "<p>Important announcement</p>",
+        "status": "active"
+    }
+)
+
+# Get a specific message
+message = message_board.get_message(message_id=new_message['id'])
 ```
 
+## 5. Campfires
 
-## 4. Attachments
-
-When attaching images or other files to Basecamp posts we do this by using [Rich text](https://github.com/basecamp/bc3-api/blob/3f71ee57b278be6e71f51488c71197f600395a2b/sections/rich_text.md), which means that we will be sending HTML as content to the Basecamp object we want to interact with. 
-
-Sending rich text through API is not allowed on all Basecamp objects that have rich text by themselves. Best example are Campfires, when interacting with Basecamp you can upload images and files to a campfire or edit the text style, but Basecamp API does not allow this to be done programatically. Here is a [list](https://github.com/basecamp/bc3-api/blob/3f71ee57b278be6e71f51488c71197f600395a2b/sections/rich_text.md#rich-text-content-attributes) of Basecamp endpoints that can accept rich text.
-
-
-To upload a file to Basecamp, first we need upload the file to Basecamp's server and get its `attachable_sgid`. You can do this by using the `Attachments` object and its `upload_file()` method:
+Campfires are Basecamp's chat rooms for quick, informal communication. You can read past messages and post new ones.
 
 ```python
-from basecampapi import Attachments
+# Create a Campfire resource
+campfire = bc.campfire(project_id=123456, campfire_id=123456)
 
-my_att = Attachments()
-my_att.upload_file("folder/image.png", filename="my_image")
+# Get all messages
+messages = campfire.get_lines()
+
+# Send a message
+campfire.write(data={"content": "Hello from Python!"})
 ```
-After this the file will be on Basecamp's server and it will have an automatically generated `attachable_sgid` Uploaded files can be accessed through `Attachments.files` dictionary:
-```python
-print(my_att.files)
-```
-This returns a dictionary of dictionaries which contain information about the files you uploaded:
-```python
-{
-	"my_image": {
-		'filename': 'my_image',
-		'file_size': '155291',
-		'content-type': 'image/png',
-		'sgid': 'your-file-sgid'
-		}
-}
-```
-To attach a file inside a Basecamp post, comment or any other object where rich text is accessible through API, we need to send an HTML string  as the content parameter of the object we are interacting with, and we need to use the `<bc-attachment>` tag for any file attachments.
+
+## 6. Attachments
+
+Upload files to Basecamp and attach them to messages, comments, or other objects. Files are uploaded to Basecamp's server and given an `attachable_sgid` that can be used in rich text content.
 
 ```python
-"<bc-attachment sgid='your-file-sgid'></bc-attachment>"
+# Create an Attachments resource
+attachments = bc.attachments()
+
+# Upload a file
+response = attachments.upload_file(file_path="folder/image.png", name="my_image")
+
+# Create HTML for embedding an attachment
+html = attachments.create_attachment_html(name="my_image", caption="My image")
+
+# Use in a message
+message_board = bc.message_board(project_id=123456, message_board_id=123456)
+message_board.create_message(
+    data={
+        "subject": "Test message with attachment",
+        "content": f"Hello world! <br> {html} <br> This is an image.",
+        "status": "active"
+    }
+)
 ```
 
-Creating a new Message Board post on Basecamp with our uploaded image will look like this:
+## 7. To-dos
+
+Manage to-do lists and to-dos in Basecamp projects. Access to-do sets, create and update to-do lists, and manage individual to-dos.
+
 ```python
-from basecampapi import MessageBoard
+# Access a to-do set
+todoset = bc.todoset(project_id=123456, todoset_id=123456)
 
-# Constructing the content string
-content = "Hello world! <br> \ 
-	<bc-attachment sgid='#######' caption='My image'></bc-attachment> <br> \	
-	This is an image sent from python."
+# Create a to-do list
+todolist = todoset.create_todolist(
+    data={
+        "name": "Launch checklist",
+        "description": "What we need to do before launch"
+    }
+)
 
-# Initiating the message board object
-message_board = MessageBoard(project_id=123456, message_board_id=123456)
+# Access a to-do list directly
+todolist = bc.todolist(project_id=123456, todolist_id=123456)
 
-# Creating a message
-message_board.create_message(subject="Test message", content=content)
+# Create a to-do
+todo = todolist.create_todo(
+    data={
+        "content": "Design signup form",
+        "description": "Make it simple and clean",
+        "due_on": "2022-12-31"
+    }
+)
+
+# Complete a to-do
+todolist.complete_todo(todo_id=todo['id'])
 ```
 
-## 5. Additional information
+## 8. Comments
 
-Currently available endpoints:
-- Campfire - allows reading campfire messages and writing to campfires
-- MessageBoard - allows reading, creating and updating messages, as well as reading, creating and updating comments on messages
-- Attachments - used for uploading files and attaching them to with other Basecamp objects
+The Basecamp API wrapper provides a dedicated Comments module for working with comments on any commentable resource in Basecamp, such as messages, to-dos, documents, and more.
 
-Future upgrades:
-- Vaults (Docs & Files)
-- To-dos
+```python
+# Create a Comments resource
+comments = bc.comments(project_id=123456)
 
-Request new features in [issues](https://github.com/mare011rs/basecampapi/issues).
+# Get all comments on any recording (message, to-do, etc.)
+message_comments = comments.get_all_comments(recording_id=789012)
+
+# Get a specific comment
+comment = comments.get_comment(comment_id=345678)
+
+# Create a comment on any recording
+new_comment = comments.create_comment(
+    recording_id=789012,  # This could be a message_id, todo_id, etc.
+    data={"content": "<p>This is a comment</p>"}
+)
+
+# Update a comment
+updated_comment = comments.update_comment(
+    comment_id=new_comment['id'],
+    data={"content": "<p>Updated comment</p>"}
+)
+
+# Trash a comment
+comments.trash_comment(comment_id=new_comment['id'])
+```
+
+### Benefits of the Comments Module
+
+- **Universal compatibility**: Works with comments on any commentable resource in Basecamp
+- **Consistent interface**: Provides a standardized way to interact with comments across different resource types
+- **Complete functionality**: Includes all comment operations (get, create, update, trash)
+- **Separation of concerns**: Keeps comment functionality separate from other resource-specific operations
+
+## 9. Chatbots
+
+Post messages to Campfire chats programmatically using chatbots. Useful for integrating Basecamp with other systems like CI/CD pipelines or monitoring tools.
+
+```python
+# Create a chatbot
+new_chatbot = bc.request(
+    method='POST',
+    path=f'/buckets/{project_id}/chats/{campfire_id}/integrations.json',
+    data={
+        "service_name": "deploy",
+        "command_url": "https://example.com/webhook"
+    }
+)
+chatbot_key = new_chatbot['lines_url'].split('/integrations/')[1].split('/')[0]
+
+# Create a Chatbot resource
+chatbot = bc.chatbot(chatbot_key=chatbot_key)
+
+# Post a message
+chatbot.write(
+    project_id=123456,
+    campfire_id=789012,
+    data={"content": "Deployment completed successfully!"}
+)
+```
+
+## 10. Custom Request Method
+
+Access any Basecamp API endpoint directly, even those not yet implemented in the wrapper. Useful for new API features or custom integrations.
+
+```python
+# List all projects
+projects = bc.request(
+    method='GET',
+    path='/projects.json'
+)
+
+# Create a to-do
+new_todo = bc.request(
+    method='POST',
+    path=f'/buckets/{project_id}/todolists/{todolist_id}/todos.json',
+    data={
+        "content": "Research new API features",
+        "due_on": "2023-12-31"
+    }
+)
+```
